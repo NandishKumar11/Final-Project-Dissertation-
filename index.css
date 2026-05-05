@@ -1,0 +1,210 @@
+import React from 'react';
+import {
+  Chart as ChartJS,
+  CategoryScale,
+  LinearScale,
+  BarElement,
+  ArcElement,
+  Tooltip,
+  Legend
+} from 'chart.js';
+import { Bar, Doughnut } from 'react-chartjs-2';
+import { ITEM_DB } from '../data';
+
+ChartJS.register(CategoryScale, LinearScale, BarElement, ArcElement, Tooltip, Legend);
+
+function Dataset() {
+  const labels = Object.keys(ITEM_DB);
+  const counts = [4800,3200,3600,4200,4100,3800,5200,4400, 2600,3000,2800,2600,2900,2400,2700,2500, 3200,2800,2964,3100,2756, 2620,2500,2750,2580,2650];
+  const catColors = { fruit: '#E53935', veg: '#2D5A3D', pkg: '#1565C0', bakery: '#F57F17' };
+  const cats = labels.map(k => ITEM_DB[k].cat);
+  const colors = cats.map(c => catColors[c] || '#888');
+
+  const barData = {
+    labels: labels.map(l => l.replace('_', ' ')),
+    datasets: [{
+      label: 'Images',
+      data: counts,
+      backgroundColor: colors,
+      borderRadius: 4,
+      borderSkipped: false
+    }]
+  };
+
+  const barOptions = {
+    responsive: true,
+    maintainAspectRatio: false,
+    plugins: { legend: { display: false } },
+    scales: {
+      x: { ticks: { font: { size: 9 }, maxRotation: 60, autoSkip: false }, grid: { display: false } },
+      y: { ticks: { font: { size: 10 } } }
+    }
+  };
+
+  const pieData = {
+    labels: ['Fruits-360', 'Vegetable Dataset', 'Grocery Store', 'Food-101'],
+    datasets: [{
+      data: [44, 24, 17, 15],
+      backgroundColor: ['#E53935','#2D5A3D','#1565C0','#F57F17'],
+      borderWidth: 3,
+      borderColor: '#fff',
+      hoverOffset: 10
+    }]
+  };
+
+  const pieOptions = {
+    responsive: true,
+    maintainAspectRatio: false,
+    plugins: {
+      legend: { display: false },
+      tooltip: { callbacks: { label: ctx => ctx.label + ': ' + ctx.raw + '%' } }
+    }
+  };
+
+  return (
+    <div className="section active" style={{ display: 'block' }}>
+      <div className="section-title" style={{ paddingTop: '20px' }}>Dataset Summary</div>
+      <div style={{ padding: '0 24px 0' }}>
+        <div className="card">
+          <div className="card-header">
+            <div>
+              <h3>Table 1 — Dataset Summary</h3>
+              <div className="card-sub">4 Kaggle datasets merged into unified training set</div>
+            </div>
+          </div>
+          <div className="card-body" style={{ padding: 0, overflowX: 'auto' }}>
+            <table className="data-table">
+              <thead>
+                <tr>
+                  <th>Dataset Name</th><th>Source (Kaggle)</th><th>Classes Used</th><th>Images</th><th>Category</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td><strong>Fruits-360</strong></td>
+                  <td style={{ fontFamily: 'monospace', fontSize: '10px' }}>moltean/fruits</td>
+                  <td>8 (Apple, Banana, Orange, Mango, Grape, Strawberry, Watermelon, Pineapple)</td>
+                  <td><strong>38,420</strong></td>
+                  <td><span className="cat-chip cat-fruit">🍎 Fruits</span></td>
+                </tr>
+                <tr>
+                  <td><strong>Vegetable Image Dataset</strong></td>
+                  <td style={{ fontFamily: 'monospace', fontSize: '10px' }}>misrakahmed/vegetable-image-dataset</td>
+                  <td>8 (Potato, Tomato, Carrot, Capsicum, Onion, Broccoli, Cucumber, Pumpkin)</td>
+                  <td><strong>21,000</strong></td>
+                  <td><span className="cat-chip cat-veg">🥦 Vegetables</span></td>
+                </tr>
+                <tr>
+                  <td><strong>Grocery Store Dataset</strong></td>
+                  <td style={{ fontFamily: 'monospace', fontSize: '10px' }}>validmodel/grocery-store-dataset</td>
+                  <td>5 (Juice, Milk, Chips, Soda, Water)</td>
+                  <td><strong>14,820</strong></td>
+                  <td><span className="cat-chip cat-pkg">📦 Packaged</span></td>
+                </tr>
+                <tr>
+                  <td><strong>Food-101</strong></td>
+                  <td style={{ fontFamily: 'monospace', fontSize: '10px' }}>dansbecker/food-101</td>
+                  <td>5 (Donuts, Waffles, Pancakes, Bread Pudding, Muffins)</td>
+                  <td><strong>13,100</strong></td>
+                  <td><span className="cat-chip cat-bakery">🥐 Bakery</span></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <div className="content-grid" style={{ padding: '16px 24px 0' }}>
+        <div className="card">
+          <div className="card-header">
+            <div>
+              <h3>Graph 1 — Images per Class</h3>
+              <div className="card-sub">Color-coded by category</div>
+            </div>
+          </div>
+          <div className="card-body">
+            <div style={{ display: 'flex', flexWrap: 'wrap', gap: '8px', marginBottom: '10px', fontSize: '11px' }}>
+              <span style={{ display: 'flex', alignItems: 'center', gap: '4px' }}><span style={{ width: '10px', height: '10px', borderRadius: '2px', background: '#E53935' }}></span>Fruits</span>
+              <span style={{ display: 'flex', alignItems: 'center', gap: '4px' }}><span style={{ width: '10px', height: '10px', borderRadius: '2px', background: '#2D5A3D' }}></span>Vegetables</span>
+              <span style={{ display: 'flex', alignItems: 'center', gap: '4px' }}><span style={{ width: '10px', height: '10px', borderRadius: '2px', background: '#1565C0' }}></span>Packaged</span>
+              <span style={{ display: 'flex', alignItems: 'center', gap: '4px' }}><span style={{ width: '10px', height: '10px', borderRadius: '2px', background: '#F57F17' }}></span>Bakery</span>
+            </div>
+            <div style={{ position: 'relative', width: '100%', height: '320px' }}>
+              <Bar data={barData} options={barOptions} />
+            </div>
+          </div>
+        </div>
+        <div className="card">
+          <div className="card-header">
+            <div>
+              <h3>Graph 2 — Dataset Contribution</h3>
+              <div className="card-sub">Percentage share by dataset</div>
+            </div>
+          </div>
+          <div className="card-body">
+            <div style={{ display: 'flex', flexWrap: 'wrap', gap: '8px', marginBottom: '10px', fontSize: '11px' }}>
+              <span style={{ display: 'flex', alignItems: 'center', gap: '4px' }}><span style={{ width: '10px', height: '10px', borderRadius: '2px', background: '#E53935' }}></span>Fruits-360 44%</span>
+              <span style={{ display: 'flex', alignItems: 'center', gap: '4px' }}><span style={{ width: '10px', height: '10px', borderRadius: '2px', background: '#2D5A3D' }}></span>Vegetables 24%</span>
+              <span style={{ display: 'flex', alignItems: 'center', gap: '4px' }}><span style={{ width: '10px', height: '10px', borderRadius: '2px', background: '#1565C0' }}></span>Grocery 17%</span>
+              <span style={{ display: 'flex', alignItems: 'center', gap: '4px' }}><span style={{ width: '10px', height: '10px', borderRadius: '2px', background: '#F57F17' }}></span>Food-101 15%</span>
+            </div>
+            <div style={{ position: 'relative', width: '100%', height: '320px' }}>
+              <Doughnut data={pieData} options={pieOptions} />
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div className="section-title">Graph 3 — Sample Images by Category</div>
+      <div style={{ padding: '0 24px 24px' }}>
+        <div className="card">
+          <div className="card-header">
+            <div><h3>16-Image Grid (4 categories × 4 items)</h3></div>
+          </div>
+          <div className="card-body">
+            <div className="img-grid">
+              <div>
+                <div style={{ fontSize: '10px', fontWeight: '700', color: '#C62828', textTransform: 'uppercase', letterSpacing: '0.5px', marginBottom: '8px' }}>🍎 Fruits</div>
+                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '6px' }}>
+                  <div className="img-item" style={{ background: '#FFF0F0', height: '60px' }}><span style={{ fontSize: '22px' }}>🍎</span><span>Apple</span></div>
+                  <div className="img-item" style={{ background: '#FFF8E1', height: '60px' }}><span style={{ fontSize: '22px' }}>🍌</span><span>Banana</span></div>
+                  <div className="img-item" style={{ background: '#FFF3E0', height: '60px' }}><span style={{ fontSize: '22px' }}>🍊</span><span>Orange</span></div>
+                  <div className="img-item" style={{ background: '#FFF8E1', height: '60px' }}><span style={{ fontSize: '22px' }}>🥭</span><span>Mango</span></div>
+                </div>
+              </div>
+              <div>
+                <div style={{ fontSize: '10px', fontWeight: '700', color: '#2D5A3D', textTransform: 'uppercase', letterSpacing: '0.5px', marginBottom: '8px' }}>🥦 Vegetables</div>
+                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '6px' }}>
+                  <div className="img-item" style={{ background: '#F3E5D8', height: '60px' }}><span style={{ fontSize: '22px' }}>🥔</span><span>Potato</span></div>
+                  <div className="img-item" style={{ background: '#FFEBEE', height: '60px' }}><span style={{ fontSize: '22px' }}>🍅</span><span>Tomato</span></div>
+                  <div className="img-item" style={{ background: '#FFF3E0', height: '60px' }}><span style={{ fontSize: '22px' }}>🥕</span><span>Carrot</span></div>
+                  <div className="img-item" style={{ background: '#F1F8E9', height: '60px' }}><span style={{ fontSize: '22px' }}>🥦</span><span>Broccoli</span></div>
+                </div>
+              </div>
+              <div>
+                <div style={{ fontSize: '10px', fontWeight: '700', color: '#1565C0', textTransform: 'uppercase', letterSpacing: '0.5px', marginBottom: '8px' }}>📦 Packaged</div>
+                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '6px' }}>
+                  <div className="img-item" style={{ background: '#E3F2FD', height: '60px' }}><span style={{ fontSize: '22px' }}>🧃</span><span>Juice</span></div>
+                  <div className="img-item" style={{ background: '#F3E5F5', height: '60px' }}><span style={{ fontSize: '22px' }}>🥛</span><span>Milk</span></div>
+                  <div className="img-item" style={{ background: '#FFF9C4', height: '60px' }}><span style={{ fontSize: '22px' }}>🥤</span><span>Soda</span></div>
+                  <div className="img-item" style={{ background: '#E8F5E9', height: '60px' }}><span style={{ fontSize: '22px' }}>💧</span><span>Water</span></div>
+                </div>
+              </div>
+              <div>
+                <div style={{ fontSize: '10px', fontWeight: '700', color: '#F57F17', textTransform: 'uppercase', letterSpacing: '0.5px', marginBottom: '8px' }}>🥐 Bakery</div>
+                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '6px' }}>
+                  <div className="img-item" style={{ background: '#FFF8E1', height: '60px' }}><span style={{ fontSize: '22px' }}>🍩</span><span>Donuts</span></div>
+                  <div className="img-item" style={{ background: '#FFF3E0', height: '60px' }}><span style={{ fontSize: '22px' }}>🧇</span><span>Waffles</span></div>
+                  <div className="img-item" style={{ background: '#FFF9C4', height: '60px' }}><span style={{ fontSize: '22px' }}>🥞</span><span>Pancakes</span></div>
+                  <div className="img-item" style={{ background: '#EFEBE9', height: '60px' }}><span style={{ fontSize: '22px' }}>🧁</span><span>Muffins</span></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+export default Dataset;
